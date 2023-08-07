@@ -1,0 +1,2 @@
+# pluginable
+Pluginable App template
