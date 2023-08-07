@@ -1,0 +1,323 @@
+@{layout('')}
+@{title(config.name)}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=11" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="robots" content="all,follow" />
+	<link href="@{'%cdn'}/spa.min@19.css" rel="stylesheet" />
+	<script src="@{'%cdn'}/spa.min@19.js"></script>
+	<script src="@{REPO.ui}"></script>
+	@{import('meta', 'head', 'default.css', 'default.js', 'favicon.ico')}
+</head>
+<body class="invisible">
+
+	<ui-component name="exec"></ui-component>
+	<ui-component name="locale" config="requests:1;language:@{user.language}"></ui-component>
+	<ui-component name="errorhandler"></ui-component>
+	<ui-component name="loading" class="hidden"></ui-component>
+	<ui-component name="markdown"></ui-component>
+	<ui-component name="info"></ui-component>
+	<ui-component name="datepicker" config="today:@(Today);days:@(Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday);clear:@(Clear);months:@(January,February,March,April,May,Juny,July,August,September,October,November,December)"></ui-component>
+	<ui-component name="shortcuts"></ui-component>
+	<ui-component name="dropfiles" config="exec:common/dropfiles;check:common/dropcheck" class="hidden">@(Drag &amp; Drop files here)</ui-component>
+
+	<ui-component name="LAZY menu"></ui-component>
+	<ui-component name="LAZY message" config="style:2"></ui-component>
+	<ui-component name="LAZY edit"></ui-component>
+	<ui-component name="LAZY approve"></ui-component>
+	<ui-component name="LAZY notify" config="position:bottom right"></ui-component>
+	<ui-component name="LAZY directory" config="placeholder:@(Search)"></ui-component>
+	<ui-component name="LAZY icons"></ui-component>
+	<ui-component name="LAZY colorpicker"></ui-component>
+	<ui-component name="LAZY fileuploader"></ui-component>
+	<ui-component name="LAZY clipboard"></ui-component>
+	<ui-component name="LAZY floatinginput"></ui-component>
+	<ui-component name="LAZY floatingbox"></ui-component>
+	<ui-component name="LAZY filesaver"></ui-component>
+
+	<header>
+		<a href="/" title="@(Website)" target="_blank"><i class="ti ti-globe"></i></a>
+		<ui-component name="breadcrumb" path="common.breadcrumb" config="$assign:BREADCRUMB;style:2;root:@(Home);icon:ti ti-home;rooturl:/admin/" class="invisible">
+			<ui-component name="virtualwire" path="common.page" class="toolbar" style="float:right"></ui-component>
+		</ui-component>
+	</header>
+
+	<ui-component name="navlayout" path="?.menu" config="parent:window;width:200" class="invisible">
+		<section>
+			<ui-component name="aselected" path="common.page" config="selector:a.jR">
+				<ui-component name="viewbox" path="common.page" config="parent:window;margin:48">
+					<div class="nav">
+						<ui-bind path="common.plugins" config="template" class="block">
+							<script type="text/html">
+								<nav>
+								{{ foreach m in value }}
+									{{ if !m.hidden }}
+									<a href="{{ m.url }}" class="item hellip jR{{ if m.class }} {{ m.class }}{{ fi }}" data-if="{{ m.id }}"><i class="{{ m.icon }}"></i>{{ m.name }}</a>
+									{{ fi }}
+								{{ end }}
+								</nav>
+							</script>
+						</ui-bind>
+					</div>
+				</ui-component>
+			</ui-component>
+		</section>
+
+		<main>
+			<ui-bind path="common.plugins" config="template">
+				<script type="text/html">
+					{{ foreach m in value }}
+						{{ if !m.special }}
+							<ui-component name="page" path="common.page" config="if:plugin{{ m.id }};url:/_{{ m.id }}/index.html;reload:?/reload;hidden:?/hide;id:_{{ m.id }}" class="hidden invisible"></ui-component>
+							{{ if m.routes }}
+								{{ foreach route in m.routes }}
+									{{ if route.html }}
+										<ui-component name="page" path="common.page" config="if:plugin{{ m.id }}{{ route.html }};url:/_{{ m.id }}/{{ route.html }}.html;reload:?/reload;hidden:?/hide;id:_{{ m.id }}" class="hidden invisible"></ui-component>
+									{{ fi }}
+								{{ end }}
+							{{ fi }}
+						{{ fi }}
+					{{ end }}
+				</script>
+			</ui-bind>
+			<ui-component name="page" path="common.page" config="if:welcome;url:/pages/index.html;reload:?/reload" class="hidden invisible"></ui-component>
+		</main>
+	</ui-component>
+
+	@{json(model, 'pluginsdata')}
+
+	@{if user.iframe}
+	<script src="@{user.iframe}"></script>
+	@{fi}
+
+	<script>
+
+		var user = null;
+		var common = {};
+
+		common.name = '@{CONF.name}';
+		common.plugins = PARSE('#pluginsdata');
+		common.clientid = GUID(5) + Date.now().toString(36);
+		common.name = document.title;
+		common.ready = false;
+		common.breadcrumb = [];
+		common.root = '/admin/';
+		common.api = '/admin/';
+		common.redirect = REDIRECT;
+
+		REDIRECT = function(url) {
+			if (url.charAt(0) !== '.' && url.substring(0, common.root.length) !== common.root)
+				url = common.root + url.substring(1);
+			common.redirect(url);
+		};
+
+		ENV('margin', 60);
+		ENVIRONMENT('pluginable');
+
+		DEF.versionhtml = '@{CONF.version}';
+		DEF.languagehtml = '@{user.language}';
+
+		// Injects Token to every API request
+		(function() {
+			var openplatform = NAV.query.openplatform || '';
+			if (openplatform) {
+				var hostname = openplatform.substring(0, openplatform.indexOf('/', 10));
+				openplatform = '?openplatform=' + encodeURIComponent(openplatform);
+			} else
+				common.ready = true;
+			DEF.api = common.api + openplatform;
+			ENV('upload', common.api + 'upload/' + openplatform);
+			$('body').rclass('invisible', 200);
+		})();
+
+		if (W.top !== W)
+			NAV.custom(true);
+
+		NAV.clientside('.jR');
+
+		MIDDLEWARE('init', function(next) {
+			WAIT(() => common.ready && W.user && common.breadcrumb && W.BREADCRUMB, next, null, 60000);
+		});
+
+		PLUGIN('common', function(exports) {
+
+			var model = exports.model;
+
+			model.plugins.forEach(function(plugin) {
+				plugin.url = common.root + plugin.id + '/';
+				ROUTE(plugin.url, () => exports.set('page', 'plugin' + plugin.id), 'init');
+				plugin.routes && plugin.routes.forEach(item => ROUTE((common.root + item.url).replace(/\/\//g, '/'), () => exports.set('page','plugin' + plugin.id + (item.html === 'index' ? '' : item.html)), 'init'));
+				plugin.import && $(document.body).append('<ui-import config="url:{0};id:_{1}"></ui-import>'.format('@{#}/_' + plugin.id + '/' + plugin.import, plugin.id));
+			});
+
+			exports.refresh = function() {
+				TAPI('account', 'user');
+			};
+
+			exports.redirect = function(el) {
+				REDIRECT(el.attrd('url'));
+			};
+
+			exports.dropfiles = function(e) {
+				var plugin = model.form3 || model.form2 || model.form || model.page;
+				var tmp = PLUGINS[plugin];
+				if (tmp && tmp.dropfiles)
+					tmp.dropfiles(e);
+			};
+
+			exports.dropcheck = function(e) {
+
+				var plugin = model.form3 || model.form2 || model.form || model.page;
+				var tmp;
+
+				if (plugin) {
+					tmp = PLUGINS[plugin];
+					if (tmp && tmp.dropcheck)
+						return tmp.dropcheck(e);
+				}
+
+				return false;
+			};
+
+			exports.refresh();
+
+			ON('service', function(counter) {
+				if (counter % 5 === 0)
+					exports.refresh();
+			});
+
+		});
+
+		ROUTE('/', function() {
+			REDIRECT(common.root);
+		}, 'init');
+
+		ROUTE(common.root, function() {
+			BREADCRUMB.add();
+			SET('common.page', 'welcome');
+		}, 'init');
+
+		ON('@flag showloading', function() {
+			SETTER('loading/show');
+		});
+
+		ON('@flag hideloading', function() {
+			SETTER('loading/hide', 700);
+		});
+
+		// A simple integration for navigation
+		W.APP_INIT = function() {
+
+			common.ready = true;
+
+			APP.on('init', function() {
+				var ready = false;
+				ON('location', function(url) {
+					if (url === '/' && !ready)
+						ready = true;
+					else
+						APP.path(url);
+				});
+			});
+
+			APP.on('path', function(path) {
+				if (NAV.url !== path)
+					REDIRECT(path);
+			});
+
+		};
+
+		$(document).on('mouseenter mouseleave click', '.markdown-footnote', function(e) {
+			if (e.type === 'mouseenter' || e.type === 'click') {
+				var el = $(this);
+				var container = el.closest('.markdown');
+				var offset = el.offset();
+				var opt = {};
+				opt.x = offset.left + 8;
+				opt.y = offset.top + 8;
+				opt.html = container.find('.markdown-footnotebody[data-id="{0}"]'.format(ATTRD(el))).html();
+				SETTER('info/show', opt);
+			} else
+				SETTER('!info/hide', true);
+		});
+
+		// Component: Tangular-Time
+		// Version: 1
+		// Updated: 2023-01-12 15:18
+		Thelpers.time = function(value) {
+
+			if (!value)
+				return value;
+
+			var diff = Date.now() - (value instanceof Date ? value : value.parseDate()).getTime();
+
+			var minutes = ((diff / 1000) / 60) >> 0;
+			if (minutes < 60) {
+				if (minutes < 3)
+					return '@(now)';
+				return Thelpers.pluralize(minutes, '@(# minutes ago,# minute ago,# minutes ago,# minutes ago)');
+			}
+
+			var hours = (minutes / 60) >> 0;
+			if (hours < 24)
+				return Thelpers.pluralize(hours, '@(# hours ago,# hour ago,# hours ago,# hours ago)');
+
+			var days = (hours / 24) >> 0;
+			if (days < 30)
+				return Thelpers.pluralize(days, '@(# days ago,# day ago,# days ago,# days ago)');
+
+			var months = (days / 29) >> 0;
+			if (months < 12)
+				return Thelpers.pluralize(months, '@(# months ago,# month ago,# months ago,# months ago)');
+
+			var years = (months / 12) >> 0;
+			return Thelpers.pluralize(years, '@(# years ago,# year ago,# years ago,# years ago)');
+		};
+
+		Thelpers.time2 = function(value, use3) {
+			return value ? '<span class="ta-time" data-time="{0}" title="{2}">{1}</span>'.format(value.getTime(), use3 ? Thelpers.time3(value) : Thelpers.time(value), value.format(null)) : value;
+		};
+
+		Thelpers.time3 = function(value) {
+
+			if (!value)
+				return value;
+
+			var date = value instanceof Date ? value : value.parseDate();
+			var diff = Date.now() - date.getTime();
+
+			if (date.format('yyyyMMdd') === NOW.format('yyyyMMdd'))
+				return '@(Today)';
+
+			var minutes = ((diff / 1000) / 60) >> 0;
+			var hours = (minutes / 60) >> 0;
+			var days = Math.ceil(hours / 24);
+
+			if (days < 30)
+				return Thelpers.pluralize(days, '@(# days ago,# day ago,# days ago,# days ago)');
+
+			var months = (days / 29) >> 0;
+			if (months < 12)
+				return Thelpers.pluralize(months, '@(# months ago,# month ago,# months ago,# months ago)');
+
+			var years = (months / 12) >> 0;
+			return Thelpers.pluralize(years, '@(# years ago,# year ago,# years ago,# years ago)');
+		};
+
+		ON('service', function() {
+			$('.ta-time').each(function() {
+				var el = $(this);
+				el.html(Thelpers.time(new Date(+el.attrd('time'))));
+			});
+		});
+		// End: Tangular-Time
+
+	</script>
+
+</body>
+</html>
