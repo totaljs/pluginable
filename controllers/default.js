@@ -14,7 +14,7 @@ function index() {
 
 	for (var key in F.plugins) {
 		var item = F.plugins[key];
-		if ($.user.sa || !item.visible || item.visible($.user)) {
+		if (!item.visible || item.visible($.user)) {
 			var obj = {};
 			obj.id = item.id;
 			obj.routes = item.routes;
