@@ -1,11 +1,10 @@
 exports.install = function() {
-	ROUTE('+POST    /admin/upload/',   upload, ['upload'], 1024 * 100);
-	ROUTE('FILE     /download/*.*',    download);
+	ROUTE('+POST    /admin/upload/ @upload <100MB', upload);
+	ROUTE('FILE     /download/*.*', download);
 };
 
-async function upload() {
+async function upload($) {
 
-	var $ = this;
 	var arr = [];
 
 	for (var file of $.files) {
@@ -18,9 +17,9 @@ async function upload() {
 
 }
 
-function download(req, res) {
-	var id = req.split[1];
+function download($) {
+	var id = $.split[1];
 	id = id.substring(0, id.lastIndexOf('.'));
 	id = id.split('-')[0];
-	res.filefs('files', id, req.url.lastIndexOf('download=1') !== -1);
+	$.filefs('files', id, $.query.download ? true : false);
 }

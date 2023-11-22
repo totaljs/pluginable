@@ -4,9 +4,11 @@ if (!CONF.name)
 if (!CONF.cdn)
 	CONF.cdn = '//cdn.componentator.com';
 
-CONF.allow_custom_titles = true;
+CONF.$customtitles = true;
 CONF.version = '1';
 CONF.op_icon = 'ti ti-totaljs';
+
+global.PREF = MEMORIZE('pref');
 
 FUNC.reconfigure = async function() {
 	var config = await DATA.find('cl_config').fields('id,value,type').promise();
@@ -17,7 +19,7 @@ FUNC.reconfigure = async function() {
 ON('ready', async function() {
 
 	// UI components
-	COMPONENTATOR('ui', 'exec,locale,aselected,page,breadcrumb,navlayout,virtualwire,viewbox,input,importer,box,validate,loading,selected,intranetcss,notify,message,errorhandler,empty,menu,ready,fileuploader,colorpicker,approve,icons,directory,edit,markdown,info,datepicker,shortcuts,dropfiles,properties2,configuration,datagrid', true);
+	COMPONENTATOR('ui', 'exec,locale,aselected,page,breadcrumb,navlayout,virtualwire,viewbox,input,importer,box,validate,loading,selected,intranetcss,notify,message,errorhandler,empty,menu,ready,fileuploader,colorpicker,approve,icons,directory,edit,markdown,info,datepicker,shortcuts,dropfiles,properties2,configuration,datagrid,uibuilder,uistudio', true);
 
 	var keys = Object.keys(F.plugins);
 	var config = {};

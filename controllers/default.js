@@ -2,9 +2,8 @@ exports.install = function() {
 	ROUTE('+GET /admin/*', index);
 };
 
-function index() {
+function index($) {
 
-	var $ = this;
 	var plugins = [];
 
 	if (!TEMP.url) {
@@ -19,7 +18,7 @@ function index() {
 			obj.id = item.id;
 			obj.routes = item.routes;
 			obj.position = item.position;
-			obj.name = TRANSLATOR($.user.language || '', item.name);
+			obj.name = TRANSLATE($.user.language || '', item.name);
 			obj.icon = item.icon;
 			obj.import = item.import;
 			obj.hidden = item.hidden;
