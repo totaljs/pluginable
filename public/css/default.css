@@ -21,6 +21,9 @@ header > a { float: left; width: 60px; height: 40px; line-height: 39px; text-ali
 .mainmenu { height: 30px; width: 30px; float: left; font-size: 16px; line-height: 30px; text-align: center; margin: 15px 10px 0 15px; cursor: pointer; background-color: #F0F0F0; border-radius: var(--radius); }
 .mainmenu:hover { background-color: #F5F5F5; }
 
+.toolbar .ui-searchinput { float: left; margin-left: 15px; }
+.ui-searchinput { border-radius: var(--radius); height: 24px; background-color: #FFF; line-height: 14px; }
+
 .ui-navlayout > main { border-left: 1px solid #E0E0E0; }
 .nav { background-color: transparent; }
 .ui-breadcrumb-style2 { padding-left: 13px; padding-right: 5px; }
@@ -28,10 +31,9 @@ header > a { float: left; width: 60px; height: 40px; line-height: 39px; text-ali
 /*.ui-breadcrumb-style2 > nav > i:first-child { font-size: 14px; margin-right: 5px; background-color: #F0F0F0; padding: 5px; border-radius: var(--radius); width: auto; }*/
 .ui-breadcrumb-style2 .ui-searchinput { height: 28px; }
 .ui-breadcrumb-style2 .ui-searchinput > span { line-height: 27px; height: 28px; }
-.ui-breadcrumb-style2 .ui-searchinput > input { height: 25px; }
+.ui-breadcrumb-style2 .ui-searchinput > input { height: 25px; line-height: 25px; }
 .ui-breadcrumb-style2 .toolbar { margin-top: 16px; }
 
-.ui-searchinput { border-radius: var(--radius); }
 .empty { padding: 20px; text-align: center; color: #999; border: 1px solid #E0E0E0; margin: 15px 0; border-radius: var(--radius); font-size: 12px; display: block; }
 .empty i { margin-right: 5px; }
 .ui-icons-area { z-index: 150; }

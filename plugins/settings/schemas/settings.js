@@ -34,7 +34,7 @@ NEWACTION('Settings/read', {
 			let cfg = plugin.config;
 
 			if (cfg) {
-				var name = TRANSLATOR(language, plugin.name);
+				var name = TRANSLATE(language, plugin.name);
 				model.items.push({ type: 'group', name: name });
 				for (let m of cfg) {
 					var type = m.type;
@@ -45,7 +45,7 @@ NEWACTION('Settings/read', {
 							type = typeof(m.value);
 					}
 					var item = CLONE(m);
-					item.name = TRANSLATOR(language, m.name);
+					item.name = TRANSLATE(language, m.name);
 					item.value = config[m.id];
 
 					item.type = type;
