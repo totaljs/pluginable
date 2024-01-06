@@ -66,7 +66,7 @@ NEWACTION('Admin/save', {
 		var session = {};
 		session.id = user.login;
 		session.expire = NOW.add('1 month');
-		$.cookie(user.cookie, ENCRYPTREQ($.req, session, user.salt), session.expire);
+		$.cookie(user.cookie, ENCRYPTREQ($, session, user.salt), session.expire);
 
 		$.success();
 	}
