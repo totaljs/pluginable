@@ -6,7 +6,7 @@ NEWACTION('Settings/read', {
 		var model = {};
 		var language = $.user.language;
 		var data = await DATA.find('cl_config').fields('id,value,type').promise($);
-		var keys = 'name,secret_tms,allow_tms,url,icon,op_reqtoken,op_restoken,totalapi'.split(',');
+		var keys = 'name,secret_tms,$tms,url,icon,op_reqtoken,op_restoken,totalapi'.split(',');
 		var config = {};
 
 		for (var item of data) {
@@ -61,7 +61,7 @@ NEWACTION('Settings/read', {
 
 NEWACTION('Settings/save', {
 	name: 'Save settings',
-	input: 'name:String, url:URL, icon:String, allow_tms:Boolean, secret_tms:String, op_reqtoken:String, op_restoken:String, totalapi:String, items:[*id:String, value:Object]',
+	input: 'name:String, url:URL, icon:String, $tms:Boolean, secret_tms:String, op_reqtoken:String, op_restoken:String, totalapi:String, items:[*id:String, value:Object]',
 	permissions: 'settings',
 	action: async function($, model) {
 

@@ -17,8 +17,8 @@
 							<label><i class="ti ti-totaljs"></i>@(TMS)</label>
 						</div>
 						<p>@(The Total.js Message Service (TMS) allows you to publish data, subscribe to events, and call remote procedures to this app.)</p>
-						<ui-component name="input" path="?.allow_tms" config="type:checkbox">@(Enable TMS)</ui-component>
-						<ui-bind path="?.allow_tms" config="show" class="hidden block" style="margin-top:15px">
+						<ui-component name="input" path="?.$tms" config="type:checkbox">@(Enable TMS)</ui-component>
+						<ui-bind path="?.$tms" config="show" class="hidden block" style="margin-top:15px">
 
 							<p class="m"><i class="ti ti-globe blue mr5"></i>@(URL address:) <ui-bind path="location.origin" config="html:value + '/$tms/'" class="b"></ui-bind></p>
 

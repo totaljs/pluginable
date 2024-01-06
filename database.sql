@@ -18,7 +18,7 @@ CREATE TABLE "public"."cl_config" (
 -- =============================================
 
 INSERT INTO "public"."cl_config" ("id", "value", "type") VALUES
-	('allow_tms', 'false', 'boolean'),
+	('$tms', 'false', 'boolean'),
 	('cdn', '//cdn.componentator.com', 'string'),
 	('name', 'Pluginable', 'string'),
 	('salt', SUBSTRING(MD5(RANDOM()::text), 0, 13), 'string');
