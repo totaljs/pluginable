@@ -156,6 +156,6 @@ function Logout() {
 	}
 }
 
-LOCALIZE($ => ($.user ? $.user.language : $.query.language) || CONF.language || '');
+LOCALIZE($ => ($.user ? $.user.language : '') || $.query.language || CONF.language || '');
 AUTH(Data.auth);
 global.OpenPlatform = Data;
