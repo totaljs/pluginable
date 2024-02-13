@@ -25,21 +25,25 @@
 	<ui-component name="datepicker" config="today:@(Today);days:@(Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday);clear:@(Clear);months:@(January,February,March,April,May,Juny,July,August,September,October,November,December)"></ui-component>
 	<ui-component name="shortcuts"></ui-component>
 	<ui-component name="dropfiles" config="exec:common/dropfiles;check:common/dropcheck" class="hidden">@(Drag &amp; Drop files here)</ui-component>
+	<ui-component name="imageviewer" config="unknown:@(Unknown image)"></ui-component>
+	<ui-component name="edit"></ui-component>
 
-	<ui-component name="LAZY menu"></ui-component>
+	<ui-component name="LAZY menu" config="style:2"></ui-component>
 	<ui-component name="LAZY message" config="style:2"></ui-component>
-	<ui-component name="LAZY edit"></ui-component>
 	<ui-component name="LAZY approve"></ui-component>
 	<ui-component name="LAZY notify" config="position:bottom right"></ui-component>
 	<ui-component name="LAZY directory" config="placeholder:@(Search);create:@(Create)"></ui-component>
 	<ui-component name="LAZY icons"></ui-component>
+	<ui-component name="LAZY filebrowser"></ui-component>
+	<ui-component name="LAZY fileuploader"></ui-component>
 	<ui-component name="LAZY colorpicker"></ui-component>
 	<ui-component name="LAZY fileuploader"></ui-component>
 	<ui-component name="LAZY clipboard"></ui-component>
 	<ui-component name="LAZY floatinginput"></ui-component>
 	<ui-component name="LAZY floatingbox"></ui-component>
 	<ui-component name="LAZY filesaver"></ui-component>
-	<ui-component name="LAZY prompt" config="cancel:@(Cancel);submit:@(OK)"></ui-component>
+	<ui-component name="LAZY spotlight"></ui-component>
+	<ui-component name="LAZY prompt" config="cancel:@(Cancel);submit:@(OK);zindex:200"></ui-component>
 
 	<header>
 		<a href="/" title="@(Website)" target="_blank"><i class="ti ti-globe"></i></a>
@@ -107,8 +111,7 @@
 		common.name = document.title;
 		common.ready = false;
 		common.breadcrumb = [];
-		common.root = '/admin/';
-		common.api = '/admin/';
+		common.api = common.root = '@{CONF.$api}';
 		common.redirect = REDIRECT;
 
 		REDIRECT = function(url) {
@@ -120,6 +123,7 @@
 		ENV('margin', 60);
 		ENVIRONMENT('pluginable');
 
+		DEF.fallback = '@{#}/cdn/j-{0}.html';
 		DEF.versionhtml = '@{CONF.version}';
 		DEF.languagehtml = '@{user.language}';
 
@@ -149,10 +153,13 @@
 
 			var model = exports.model;
 
+			model.plugins.quicksort('position');
 			model.plugins.forEach(function(plugin) {
 				plugin.url = common.root + plugin.id + '/';
-				ROUTE(plugin.url, () => exports.set('page', 'plugin' + plugin.id), 'init');
-				plugin.routes && plugin.routes.forEach(item => ROUTE((common.root + item.url).replace(/\/\//g, '/'), () => exports.set('page','plugin' + plugin.id + (item.html === 'index' ? '' : item.html)), 'init'));
+				if (!plugin.hidden) {
+					ROUTE(plugin.url, () => exports.set('page', 'plugin' + plugin.id), 'init');
+					plugin.routes && plugin.routes.forEach(item => ROUTE((common.root + item.url).replace(/\/\//g, '/'), () => exports.set('page','plugin' + plugin.id + (item.html === 'index' ? '' : item.html)), 'init'));
+				}
 				plugin.import && $(document.body).append('<ui-import config="url:{0};id:_{1}"></ui-import>'.format('@{#}/_' + plugin.id + '/' + plugin.import, plugin.id));
 			});
 
