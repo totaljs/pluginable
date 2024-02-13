@@ -19,7 +19,7 @@ FUNC.reconfigure = async function() {
 ON('ready', async function() {
 
 	// UI components
-	COMPONENTATOR('ui', 'exec,locale,aselected,page,breadcrumb,navlayout,virtualwire,viewbox,input,importer,box,validate,loading,selected,intranetcss,notify,message,errorhandler,empty,menu,ready,fileuploader,filebrowser,filesaver,colorpicker,approve,icons,directory,edit,markdown,info,datepicker,shortcuts,dropfiles,properties2,configuration,datagrid,imageviewer,prompt,spotlight,', true);
+	COMPONENTATOR('ui', 'exec,locale,aselected,page,breadcrumb,navlayout,virtualwire,viewbox,input,importer,box,validate,loading,selected,intranetcss,notify,message,errorhandler,empty,menu,ready,fileuploader,filebrowser,filesaver,colorpicker,approve,icons,directory,edit,markdown,info,datepicker,shortcuts,dropfiles,properties2,configuration,datagrid,imageviewer,prompt,spotlight,', 'darkmode=0');
 
 	var keys = Object.keys(F.plugins);
 	var config = {};
