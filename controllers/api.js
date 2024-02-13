@@ -1,6 +1,6 @@
 exports.install = function() {
-	ROUTE('+POST    /admin/upload/ @upload <100MB', upload);
-	ROUTE('FILE     /download/*.*', download);
+	ROUTE('+POST  ?upload/ @upload <100MB', upload);
+	ROUTE('FILE   /download/*.*', download);
 };
 
 async function upload($) {

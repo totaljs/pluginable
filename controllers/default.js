@@ -1,5 +1,5 @@
 exports.install = function() {
-	ROUTE('+GET /admin/*', index);
+	ROUTE('+GET ?*', index);
 };
 
 function index($) {
@@ -26,7 +26,6 @@ function index($) {
 		}
 	}
 
-	plugins.quicksort('position');
 	$.view('admin', plugins);
 
 }
