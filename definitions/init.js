@@ -6,7 +6,7 @@ if (!CONF.cdn)
 
 CONF.$customtitles = true;
 CONF.version = '1';
-CONF.op_icon = 'ti ti-totaljs';
+CONF.op_icon = 'ti ti-puzzle';
 
 global.PREF = MEMORIZE('pref');
 
