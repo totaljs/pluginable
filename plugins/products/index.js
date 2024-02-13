@@ -13,8 +13,5 @@ exports.config = [
 ];
 
 exports.install = function() {
-
-	// Profiles
-	ROUTE('+API    /admin/    -products    --> Products/list');
-
+	ROUTE('+API   ?   -products    --> Products/list');
 };
