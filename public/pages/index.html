@@ -29,8 +29,17 @@
 	PLUGIN(function(exports) {
 
 		exports.refresh = function() {
-			var plugins = common.plugins.slice(0);
-			exports.set('plugins', plugins);
+
+			var plugins = common.plugins;
+			var items = [];
+
+			for (var m of plugins) {
+				if (!m.hidden)
+					items.push(m);
+			}
+
+			exports.set('plugins', items);
+
 		};
 
 		exports.exec = function(el) {
