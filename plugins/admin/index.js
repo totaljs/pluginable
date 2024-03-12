@@ -6,11 +6,11 @@ exports.import = 'extensions.html';
 exports.hidden = true;
 
 exports.install = function() {
-	ROUTE('+API    /admin/    -admin_read    --> Admin/read');
-	ROUTE('+API    /admin/    +admin_save    --> Admin/save');
-	ROUTE('+API    /admin/    -logout        --> Admin/logout');
-	ROUTE('-API    /admin/    +login         --> Admin/login');
-	ROUTE('-GET    /admin/*', login);
+	ROUTE('+API    ?    -admin_read    --> Admin/read');
+	ROUTE('+API    ?    +admin_save    --> Admin/save');
+	ROUTE('+API    ?    -logout        --> Admin/logout');
+	ROUTE('-API    ?    +login         --> Admin/login');
+	ROUTE('-GET    ?*', login);
 };
 
 FUNC.authadmin = function($) {
