@@ -104,7 +104,10 @@ NEWACTION('Admin/logout', {
 });
 
 function login($) {
-	$.view('#admin/login');
+	if (CONF.op_reqtoken && CONF.op_restoken)
+		$.fallback(401);
+	else
+		$.view('#admin/login');
 }
 
 if (!PREF.user) {
@@ -117,3 +120,5 @@ if (!PREF.user) {
 		PREF.save();
 	})();
 }
+
+CONF.op_cookie = PREF.user.cookie;
