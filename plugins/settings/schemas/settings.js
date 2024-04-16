@@ -46,8 +46,6 @@ NEWACTION('Settings/read', {
 					}
 					var item = CLONE(m);
 					item.name = TRANSLATE(language, m.name);
-					item.value = config[m.id];
-
 					item.type = type;
 					model.items.push(item);
 				}
